@@ -21,7 +21,7 @@ public class ReizigerDAOPsql implements ReizigerDAO<Reiziger> {
             mystmt.setString(3, reiziger.getTussenvoegsel());
             mystmt.setString(4, reiziger.getAchternaam());
             mystmt.setDate(5, reiziger.getGeboortedatum());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +39,7 @@ public class ReizigerDAOPsql implements ReizigerDAO<Reiziger> {
             mystmt.setString(2, reiziger.getTussenvoegsel());
             mystmt.setString(3, reiziger.getAchternaam());
             mystmt.setDate(4, reiziger.getGeboortedatum());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class ReizigerDAOPsql implements ReizigerDAO<Reiziger> {
             conn = DriverManager.getConnection("jdbc:postgresql:ovchip", "postgres", "TugbaK26");
             PreparedStatement mystmt = conn.prepareStatement("DELETE FROM reiziger WHERE reiziger_id=?");
             mystmt.setInt(1, reiziger.getReiziger_id());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -23,7 +23,7 @@ public class AdresDAOPsql implements AdresDAO<Adres>{
             mystmt.setString(4, adres.getStraat());
             mystmt.setString(5, adres.getWoonplaats());
             mystmt.setInt(6, adres.getReiziger_id());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class AdresDAOPsql implements AdresDAO<Adres>{
             mystmt.setString(4, adres.getWoonplaats());
             mystmt.setInt(5, adres.getReiziger_id());
             mystmt.setInt(6, adres.getAdres_id());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class AdresDAOPsql implements AdresDAO<Adres>{
             conn = DriverManager.getConnection("jdbc:postgresql:ovchip", "postgres", "TugbaK26");
             PreparedStatement mystmt = conn.prepareStatement("DELETE FROM adres WHERE adres_id=?");
             mystmt.setInt(1, adres.getAdres_id());
-            mystmt.executeQuery();
+            mystmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,18 +68,19 @@ public class AdresDAOPsql implements AdresDAO<Adres>{
             PreparedStatement mystmt = conn.prepareStatement("SELECT * FROM adres WHERE reiziger_id=?");
             mystmt.setInt(1, reiziger.getReiziger_id());
             ResultSet rs = mystmt.executeQuery();
+            if(rs.next()){
+                int adres_id = rs.getInt(1);
+                String postcode = rs.getString(2);
+                String huisnummer = rs.getString(3);
+                String straat = rs.getString(4);
+                String woonplaats = rs.getString(5);
+                int reiziger_id = rs.getInt(6);
 
-            int adres_id = rs.getInt(1);
-            String postcode = rs.getString(2);
-            String huisnummer = rs.getString(3);
-            String straat = rs.getString(4);
-            String woonplaats = rs.getString(5);
-            int reiziger_id = rs.getInt(6);
-
-            Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id);
-            rs.close();
-            mystmt.close();
-            return adres;
+                Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id);
+                mystmt.close();
+                rs.close();
+                return adres;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,27 +1,29 @@
 package com.company;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-
+    private static Connection conn;
 
 
     public static void main(String[] args) throws SQLException {
-        Connection conn = null;
+        getConnection();
         ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(conn);
         AdresDAOPsql adresDAO = new AdresDAOPsql(conn);
         testReizigerDAO(reizigerDAO);
         testAdresDAO(reizigerDAO, adresDAO);
+        closeConnection();
     }
 
-    private void getConnection(){
-
+    private static void getConnection() throws SQLException {
+        conn = DriverManager.getConnection("jdbc:postgresql:ovchip", "postgres", "TugbaK26");
     }
 
-    private void closeConnection(){
-
+    private static void closeConnection() throws SQLException {
+        conn.close();
     }
 
     private static void testReizigerDAO (ReizigerDAO rdao) throws SQLException {
@@ -96,11 +98,8 @@ public class Main {
         }
 
         reizigers = rdao.findAll();
-        adressen = adao.findAll();
         for (Reiziger r : reizigers) {
-            System.out.print(r);
-            System.out.print(adressen.get(r.getReiziger_id()-1));
-            System.out.println("\n");
+            System.out.print(r + ", " + adao.findByReiziger(r) +"\n");
         }
     }
 }
